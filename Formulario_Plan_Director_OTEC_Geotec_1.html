@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plan Director OTEC Geotec — Formulario de sesiones</title>
+<style>
+  :root{
+    --navy:#1F3864; --navy-dark:#152747; --gold:#B08D57; --grey:#595959;
+    --light:#F4F4F2; --line:#D9D9D6; --ink:#1A1A1A; --bg:#EFEFEC;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:0; background:var(--bg); color:var(--ink);
+    font-family:"Georgia","Times New Roman",serif;
+    font-size:15px; line-height:1.5;
+  }
+  .toolbar{
+    position:sticky; top:0; z-index:50; background:var(--navy);
+    color:#fff; padding:10px 18px; display:flex; gap:10px; flex-wrap:wrap;
+    align-items:center; font-family:Arial,Helvetica,sans-serif;
+    box-shadow:0 2px 6px rgba(0,0,0,.2);
+  }
+  .toolbar .title{font-weight:bold; margin-right:auto; font-size:14px; letter-spacing:.3px;}
+  .toolbar button{
+    background:transparent; color:#fff; border:1px solid rgba(255,255,255,.5);
+    padding:7px 12px; border-radius:5px; font-size:12.5px; cursor:pointer;
+    font-family:Arial,Helvetica,sans-serif;
+  }
+  .toolbar button:hover{background:rgba(255,255,255,.12);}
+  .toolbar button.primary{background:var(--gold); border-color:var(--gold); font-weight:bold;}
+  .toolbar button.primary:hover{background:#a17c48;}
+  .toolbar .status{font-size:11.5px; color:#cfd8e6; font-family:Arial,Helvetica,sans-serif;}
+  .wrap{max-width:860px; margin:0 auto; padding:28px 20px 80px;}
+  .cover{text-align:center; padding-bottom:14px; border-bottom:2px solid var(--navy); margin-bottom:22px;}
+  .cover .kicker{color:var(--gold); letter-spacing:1.5px; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:bold; text-transform:uppercase;}
+  .cover h1{color:var(--navy); font-size:28px; margin:8px 0 4px;}
+  .cover .sub{color:var(--grey); font-style:italic; font-size:15px;}
+  .meta{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin:18px 0 28px; font-family:Arial,Helvetica,sans-serif;}
+  .meta label{display:block; font-size:11px; color:var(--grey); text-transform:uppercase; letter-spacing:.4px; margin-bottom:3px;}
+  .meta input{width:100%; border:none; border-bottom:1px solid var(--line); background:transparent; padding:4px 2px; font-size:14px; font-family:Georgia,serif;}
+  .meta input:focus{outline:none; border-bottom:1px solid var(--gold);}
+
+  h2.section{
+    color:#fff; background:var(--navy); padding:10px 16px; border-radius:4px;
+    font-size:17px; margin:34px 0 4px; font-family:Arial,Helvetica,sans-serif;
+  }
+  .session-goal{color:var(--grey); font-style:italic; font-size:13.5px; margin:8px 0 18px; font-family:Arial,Helvetica,sans-serif;}
+  h3.block{color:var(--gold); font-size:15px; margin:22px 0 8px; font-family:Arial,Helvetica,sans-serif; border-bottom:1px solid var(--line); padding-bottom:4px;}
+  .hint{color:var(--grey); font-size:12.5px; font-family:Arial,Helvetica,sans-serif; margin:0 0 8px;}
+
+  label.field-label{display:block; font-weight:bold; font-size:13px; color:var(--navy); margin:14px 0 4px; font-family:Arial,Helvetica,sans-serif;}
+  textarea, input[type=text], input[type=date]{
+    width:100%; border:1px solid var(--line); border-radius:4px; padding:9px 10px;
+    font-family:Georgia,serif; font-size:14.5px; color:var(--ink); background:#fff;
+    resize:none; overflow:hidden;
+  }
+  textarea:focus, input:focus{outline:none; border-color:var(--gold); box-shadow:0 0 0 2px rgba(176,141,87,.15);}
+
+  .canvas-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:6px;}
+  @media (max-width:640px){ .canvas-grid{grid-template-columns:1fr;} }
+  .canvas-cell{background:var(--light); border:1px solid var(--line); border-radius:6px; padding:10px 12px;}
+  .canvas-cell .num{display:inline-block; background:var(--navy); color:#fff; width:20px; height:20px; text-align:center; line-height:20px; border-radius:50%; font-size:11px; font-family:Arial,Helvetica,sans-serif; margin-right:6px;}
+  .canvas-cell .lbl{font-weight:bold; color:var(--navy); font-size:12.5px; font-family:Arial,Helvetica,sans-serif;}
+  .canvas-cell textarea{margin-top:6px; background:#fff;}
+
+  .callout{background:var(--light); border-left:4px solid var(--gold); padding:10px 14px; margin:14px 0; font-style:italic; color:#3b3b3b; font-size:13.5px;}
+
+  .radio-row{display:flex; gap:16px; margin:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:13.5px;}
+  .radio-row label{display:flex; align-items:center; gap:6px; font-weight:normal; color:var(--ink);}
+
+  table.dyn{width:100%; border-collapse:collapse; margin-top:6px; font-family:Arial,Helvetica,sans-serif; font-size:13px;}
+  table.dyn th{background:var(--navy); color:#fff; text-align:left; padding:7px 8px; font-size:11.5px;}
+  table.dyn td{border:1px solid var(--line); padding:5px 6px; vertical-align:top;}
+  table.dyn td input, table.dyn td select{border:none; width:100%; padding:5px 4px; font-family:Georgia,serif; font-size:13.5px;}
+  table.dyn td select{font-family:Arial,Helvetica,sans-serif; font-size:12.5px;}
+  table.dyn .rm{background:none; border:none; color:#b03030; font-size:16px; cursor:pointer; font-weight:bold;}
+  .add-row{margin-top:8px; background:#fff; border:1px dashed var(--navy); color:var(--navy); padding:6px 12px; border-radius:4px; font-size:12.5px; cursor:pointer; font-family:Arial,Helvetica,sans-serif;}
+  .add-row:hover{background:var(--light);}
+
+  .foot-note{margin-top:40px; padding-top:14px; border-top:1px solid var(--line); font-family:Arial,Helvetica,sans-serif; font-size:11.5px; color:var(--grey);}
+
+  @media print{
+    .toolbar{display:none;}
+    body{background:#fff;}
+    .wrap{max-width:100%; padding:0;}
+    textarea, input{border:none !important; box-shadow:none !important; padding:2px 0 !important;}
+    .canvas-cell{break-inside:avoid;}
+    h2.section{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+    table.dyn th{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+    .add-row, table.dyn .rm{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span class="title">AKADEM · Plan Director OTEC Geotec</span>
+  <span class="status" id="status">Sin cambios aún</span>
+  <button onclick="window.print()">🖨️ Imprimir</button>
+  <button class="primary" onclick="exportWord()">⬇ Exportar a Word (.doc)</button>
+  <button onclick="exportJSON()">💾 Guardar avance (.json)</button>
+  <button onclick="document.getElementById('loadFile').click()">📂 Cargar avance</button>
+  <input type="file" id="loadFile" accept="application/json" style="display:none" onchange="importJSON(event)">
+  <button onclick="clearForm()">🗑 Limpiar</button>
+</div>
+
+<div class="wrap">
+
+  <div class="cover">
+    <div class="kicker">AKADEM · Proyecto OTEC Geotec</div>
+    <h1>Plan Director del Proyecto</h1>
+    <div class="sub">Formulario de trabajo para las 2 sesiones con el Gerente de la OTEC</div>
+  </div>
+
+  <p class="hint" style="text-align:center; margin-top:-10px;">
+    Tus respuestas quedan en esta pestaña mientras la tengas abierta. Antes de cerrarla, pulsa
+    <strong>“Guardar avance (.json)”</strong> para conservarlas en tu computador, y <strong>“Cargar avance”</strong>
+    la próxima vez para continuar donde quedaste. “Exportar a Word” genera el Plan Director con lo que hayas
+    llenado hasta ese momento.
+  </p>
+
+  <div class="meta">
+    <div><label>Cliente</label><input type="text" id="m_cliente" value="Geotec"></div>
+    <div><label>Contraparte (Gerente OTEC)</label><input type="text" id="m_contraparte" value="Cristofer"></div>
+    <div><label>Facilitador</label><input type="text" id="m_facilitador" value="Antonio Villalobos"></div>
+    <div><label>Fecha Sesión 1</label><input type="date" id="m_fecha1"></div>
+    <div><label>Fecha Sesión 2</label><input type="date" id="m_fecha2"></div>
+  </div>
+
+  <!-- ===================== SESIÓN 1 ===================== -->
+  <h2 class="section">Sesión 1 — Propósito, Visión y Modelo de Negocio</h2>
+  <p class="session-goal">Objetivo: que Cristofer articule por qué existe la OTEC más allá de la franquicia, hacia dónde debe estar en dic-2027, y cómo genera valor.</p>
+
+  <label class="field-label">Enunciado de Propósito</label>
+  <p class="hint">¿Por qué existe la OTEC de Geotec más allá de cumplir la ley? (5 porqués / Golden Circle)</p>
+  <textarea id="s1_proposito" rows="2" placeholder="Escribe aquí el propósito acordado con Cristofer..."></textarea>
+
+  <label class="field-label">Enunciado de Visión 2027</label>
+  <p class="hint">¿Cómo se ve la OTEC operando en diciembre de 2027 si todo sale bien?</p>
+  <textarea id="s1_vision" rows="2" placeholder="Escribe aquí la visión 2027..."></textarea>
+
+  <h3 class="block">Lienzo de Modelo de Negocio / Valor OTEC</h3>
+  <p class="hint">No es venta externa por ahora. Completar en vivo con Cristofer, celda por celda.</p>
+  <div class="canvas-grid">
+    <div class="canvas-cell"><span class="num">1</span><span class="lbl">Segmentos a los que sirve</span>
+      <textarea id="s1_c1" rows="3" placeholder="Cargos críticos de Geotec hoy; ¿apetito futuro por terceros?"></textarea></div>
+    <div class="canvas-cell"><span class="num">2</span><span class="lbl">Propuesta de valor</span>
+      <textarea id="s1_c2" rows="3" placeholder="¿Qué logra un trabajador/jefatura gracias a esta OTEC?"></textarea></div>
+    <div class="canvas-cell"><span class="num">3</span><span class="lbl">Canales</span>
+      <textarea id="s1_c3" rows="3" placeholder="Cómo llega la capacitación (LMS, presencial, mixto)"></textarea></div>
+    <div class="canvas-cell"><span class="num">4</span><span class="lbl">Relación con "clientes" internos</span>
+      <textarea id="s1_c4" rows="3" placeholder="Cómo se involucra a jefaturas de operación"></textarea></div>
+    <div class="canvas-cell"><span class="num">5</span><span class="lbl">Fuentes de sostenibilidad</span>
+      <textarea id="s1_c5" rows="3" placeholder="Franquicia SENCE, ahorro en accidentabilidad/rotación, marca empleadora"></textarea></div>
+    <div class="canvas-cell"><span class="num">6</span><span class="lbl">Estructura de costos</span>
+      <textarea id="s1_c6" rows="3" placeholder="Qué cuesta operar la OTEC vs. qué recupera vía franquicia"></textarea></div>
+  </div>
+
+  <div class="callout">Pregunta estratégica de fondo: ¿esta OTEC seguirá siendo cautiva (solo Geotec) o hay ambición de abrirla a terceros del sector minero como unidad de negocio?</div>
+  <div class="radio-row">
+    <label><input type="radio" name="decision" value="Cautiva" id="s1_dec_cautiva"> Se mantiene cautiva</label>
+    <label><input type="radio" name="decision" value="Abierta" id="s1_dec_abierta"> Se plantea abrirla a terceros</label>
+    <label><input type="radio" name="decision" value="Pendiente" id="s1_dec_pendiente" checked> Queda explícitamente pendiente</label>
+  </div>
+  <textarea id="s1_dec_notas" rows="2" placeholder="Justificación / condiciones para revisar esta decisión..."></textarea>
+
+  <label class="field-label">Tarea para Cristofer antes de la Sesión 2</label>
+  <textarea id="s1_tarea" rows="2" placeholder="3 riesgos que le quitan el sueño + 2-3 cosas que no pueden fallar..."></textarea>
+
+  <!-- ===================== SESIÓN 2 ===================== -->
+  <h2 class="section">Sesión 2 — Modelo de Operación, Riesgos/FCE, Objetivos-Metas-Indicadores</h2>
+  <p class="session-goal">Objetivo: traducir lo de la Sesión 1 en cómo se organiza el trabajo día a día, qué puede hacer fracasar el proyecto, y qué se va a medir.</p>
+
+  <h3 class="block">Modelo de Operación — mapa de 4 capas</h3>
+  <p class="hint">Usar lo ya contratado en M01-M02 como base, no reinventar.</p>
+  <div class="canvas-grid">
+    <div class="canvas-cell"><span class="num">1</span><span class="lbl">Gobernanza</span>
+      <textarea id="s2_op1" rows="3" placeholder="Comité mensual, roles OTEC/RRHH, quién aprueba qué"></textarea></div>
+    <div class="canvas-cell"><span class="num">2</span><span class="lbl">Procesos críticos</span>
+      <textarea id="s2_op2" rows="3" placeholder="Diseño de curso, carga LMS, evaluación, registro SENCE"></textarea></div>
+    <div class="canvas-cell"><span class="num">3</span><span class="lbl">Tecnología</span>
+      <textarea id="s2_op3" rows="3" placeholder="LMS, plataforma AKADEM, microlearning"></textarea></div>
+    <div class="canvas-cell"><span class="num">4</span><span class="lbl">Personas</span>
+      <textarea id="s2_op4" rows="3" placeholder="Quién hace qué en Geotec vs. qué aporta AKADEM"></textarea></div>
+  </div>
+
+  <div class="callout">Pregunta clave: ¿qué pasa el día 91? ¿Qué queda operando con el equipo propio de Geotec y qué sigue siendo servicio externo?</div>
+  <textarea id="s2_dia91" rows="2" placeholder="Respuesta a qué pasa el día 91..."></textarea>
+
+  <h3 class="block">Riesgos y Factores Críticos de Éxito</h3>
+  <p class="hint">Fila de partida = lo ya identificado en la propuesta adjudicada. Agrega, edita o elimina según lo que surja con Cristofer.</p>
+  <table class="dyn" id="tbl_riesgos">
+    <thead><tr><th style="width:60%">Riesgo / FCE</th><th style="width:15%">Tipo</th><th style="width:15%">Probabilidad</th><th style="width:15%">Impacto</th><th></th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <button class="add-row" onclick="addRiesgo()">+ Agregar riesgo / FCE</button>
+
+  <h3 class="block">Objetivos, Metas e Indicadores 2026-2027 (OKR simplificado)</h3>
+  <table class="dyn" id="tbl_okr">
+    <thead><tr><th style="width:35%">Objetivo</th><th style="width:40%">Resultado clave / indicador</th><th style="width:20%">Meta / trimestre</th><th></th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <button class="add-row" onclick="addOkr()">+ Agregar objetivo</button>
+
+  <label class="field-label">Próximos pasos y redacción del Plan Director</label>
+  <div class="meta" style="margin:6px 0 10px;">
+    <div><label>Responsable de redactar el borrador</label><input type="text" id="s2_responsable" placeholder="Antonio Villalobos"></div>
+    <div><label>Plazo de entrega del borrador</label><input type="date" id="s2_plazo"></div>
+  </div>
+  <textarea id="s2_notas" rows="3" placeholder="Notas adicionales de cierre..."></textarea>
+
+  <div class="foot-note">AKADEM · Proyecto OTEC Geotec · Documento de trabajo interno · Generado con el formulario digital de sesiones</div>
+</div>
+
+<script>
+// ---------- Auto-grow textareas ----------
+function autoGrow(el){ el.style.height='auto'; el.style.height=(el.scrollHeight+2)+'px'; }
+function bindAutoGrow(el){ autoGrow(el); el.addEventListener('input', ()=>{ autoGrow(el); touch(); }); }
+document.querySelectorAll('textarea').forEach(bindAutoGrow);
+document.querySelectorAll('input[type=text],input[type=date]').forEach(el=>el.addEventListener('input', touch));
+document.querySelectorAll('input[type=radio]').forEach(el=>el.addEventListener('change', touch));
+
+// ---------- In-memory state for dynamic tables ----------
+let riesgos = [
+  {desc:'Atraso en datos de entrada (presupuesto, especificaciones de servidor, nómina) en las primeras 2 semanas', tipo:'Riesgo', prob:'Alta', imp:'Alto'},
+  {desc:'Cristofer saturado o sin tiempo real de 3-4 h/semana', tipo:'Riesgo', prob:'Alta', imp:'Alto'},
+  {desc:'Jefaturas de operación no liberan participantes en turno', tipo:'Riesgo', prob:'Media', imp:'Alto'},
+  {desc:'Rotación de Cristofer como interlocutor único (sin respaldo en Daniela)', tipo:'Riesgo', prob:'Baja', imp:'Alto'},
+  {desc:'Comité mensual disciplinado con actas y responsables', tipo:'FCE', prob:'-', imp:'-'},
+  {desc:'Adopción real de la plataforma desde el primer mes', tipo:'FCE', prob:'-', imp:'-'},
+];
+let okr = [
+  {obj:'Operar — LMS funcionando en servidores propios', kr:'% de cursos cargados y con evidencia trazable por trimestre', meta:''},
+  {obj:'Proteger — certificación NCh 2728 sin observaciones', kr:'Hallazgos de auditoría abiertos/cerrados por trimestre', meta:''},
+  {obj:'Planificar — franquicia tributaria usada estratégicamente', kr:'% de franquicia proyectada efectivamente ejecutada', meta:''},
+  {obj:'(si aplica) Explorar apertura a terceros', kr:'Primer diagnóstico de viabilidad comercial entregado', meta:''},
+];
+
+function renderRiesgos(){
+  const tb = document.querySelector('#tbl_riesgos tbody'); tb.innerHTML='';
+  riesgos.forEach((r,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" value="${esc(r.desc)}" onchange="riesgos[${i}].desc=this.value; touch()"></td>
+      <td><select onchange="riesgos[${i}].tipo=this.value; touch()">
+            <option ${r.tipo==='Riesgo'?'selected':''}>Riesgo</option>
+            <option ${r.tipo==='FCE'?'selected':''}>FCE</option></select></td>
+      <td><select onchange="riesgos[${i}].prob=this.value; touch()">
+            <option ${r.prob==='-'?'selected':''}>-</option>
+            <option ${r.prob==='Alta'?'selected':''}>Alta</option>
+            <option ${r.prob==='Media'?'selected':''}>Media</option>
+            <option ${r.prob==='Baja'?'selected':''}>Baja</option></select></td>
+      <td><select onchange="riesgos[${i}].imp=this.value; touch()">
+            <option ${r.imp==='-'?'selected':''}>-</option>
+            <option ${r.imp==='Alto'?'selected':''}>Alto</option>
+            <option ${r.imp==='Medio'?'selected':''}>Medio</option>
+            <option ${r.imp==='Bajo'?'selected':''}>Bajo</option></select></td>
+      <td><button class="rm" onclick="riesgos.splice(${i},1); renderRiesgos(); touch()" title="Eliminar">×</button></td>`;
+    tb.appendChild(tr);
+  });
+}
+function addRiesgo(){ riesgos.push({desc:'', tipo:'Riesgo', prob:'-', imp:'-'}); renderRiesgos(); touch(); }
+
+function renderOkr(){
+  const tb = document.querySelector('#tbl_okr tbody'); tb.innerHTML='';
+  okr.forEach((o,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" value="${esc(o.obj)}" onchange="okr[${i}].obj=this.value; touch()"></td>
+      <td><input type="text" value="${esc(o.kr)}" onchange="okr[${i}].kr=this.value; touch()"></td>
+      <td><input type="text" value="${esc(o.meta)}" onchange="okr[${i}].meta=this.value; touch()" placeholder="Q1/Q2..."></td>
+      <td><button class="rm" onclick="okr.splice(${i},1); renderOkr(); touch()" title="Eliminar">×</button></td>`;
+    tb.appendChild(tr);
+  });
+}
+function addOkr(){ okr.push({obj:'', kr:'', meta:''}); renderOkr(); touch(); }
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+renderRiesgos(); renderOkr();
+
+// ---------- Status / dirty flag (in-memory only, per note above) ----------
+let dirty=false;
+function touch(){ dirty=true; document.getElementById('status').textContent='Cambios sin guardar — exporta tu avance (.json)'; }
+function markSaved(){ dirty=false; document.getElementById('status').textContent='Avance guardado el '+new Date().toLocaleString('es-CL'); }
+
+// ---------- Collect / apply state ----------
+function fieldIds(){
+  return ['m_cliente','m_contraparte','m_facilitador','m_fecha1','m_fecha2',
+    's1_proposito','s1_vision','s1_c1','s1_c2','s1_c3','s1_c4','s1_c5','s1_c6','s1_dec_notas','s1_tarea',
+    's2_op1','s2_op2','s2_op3','s2_op4','s2_dia91','s2_responsable','s2_plazo','s2_notas'];
+}
+function collectState(){
+  const st={};
+  fieldIds().forEach(id=>{ st[id]=document.getElementById(id).value; });
+  st.decision = (document.querySelector('input[name=decision]:checked')||{}).value || 'Pendiente';
+  st.riesgos = riesgos; st.okr = okr;
+  return st;
+}
+function applyState(st){
+  fieldIds().forEach(id=>{ if(st[id]!==undefined){ document.getElementById(id).value = st[id]; } });
+  document.querySelectorAll('textarea').forEach(autoGrow);
+  const radio = document.getElementById('s1_dec_'+(st.decision||'Pendiente').toLowerCase());
+  if(radio) radio.checked = true;
+  if(Array.isArray(st.riesgos)) riesgos = st.riesgos;
+  if(Array.isArray(st.okr)) okr = st.okr;
+  renderRiesgos(); renderOkr();
+}
+
+// ---------- Export / Import JSON (local file — this is your persistence) ----------
+function exportJSON(){
+  const blob = new Blob([JSON.stringify(collectState(), null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'avance_plan_director_otec_geotec.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  markSaved();
+}
+function importJSON(ev){
+  const file = ev.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { try{ applyState(JSON.parse(e.target.result)); markSaved(); }catch(err){ alert('No se pudo leer el archivo: '+err.message); } };
+  reader.readAsText(file);
+  ev.target.value='';
+}
+function clearForm(){
+  if(!confirm('¿Vaciar todo el formulario? Esta acción no se puede deshacer (exporta tu avance antes si quieres conservarlo).')) return;
+  fieldIds().forEach(id=>{ document.getElementById(id).value=''; });
+  document.getElementById('m_cliente').value='Geotec';
+  document.getElementById('m_contraparte').value='Cristofer';
+  document.getElementById('m_facilitador').value='Antonio Villalobos';
+  document.getElementById('s1_dec_pendiente').checked = true;
+  riesgos=[]; okr=[]; renderRiesgos(); renderOkr();
+  document.querySelectorAll('textarea').forEach(autoGrow);
+  touch();
+}
+
+// ---------- Export to Word (.doc) ----------
+function exportWord(){
+  const st = collectState();
+  const rowsRiesgos = st.riesgos.map(r=>`<tr><td>${esc(r.desc)}</td><td>${esc(r.tipo)}</td><td>${esc(r.prob)}</td><td>${esc(r.imp)}</td></tr>`).join('');
+  const rowsOkr = st.okr.map(o=>`<tr><td>${esc(o.obj)}</td><td>${esc(o.kr)}</td><td>${esc(o.meta)}</td></tr>`).join('');
+  const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+  <head><meta charset="utf-8"><title>Plan Director OTEC Geotec</title>
+  <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
+  <style>
+    body{font-family:Calibri,Arial,sans-serif; font-size:11pt; color:#1a1a1a;}
+    h1{color:#1F3864; font-size:20pt; margin-bottom:2pt;}
+    h2{color:#1F3864; font-size:14pt; border-bottom:1pt solid #1F3864; padding-bottom:2pt; margin-top:20pt;}
+    h3{color:#B08D57; font-size:12pt; margin-bottom:2pt;}
+    .meta{font-size:10pt; color:#444; margin-bottom:14pt;}
+    .callout{background:#F2F2F2; border-left:3pt solid #B08D57; padding:6pt 10pt; font-style:italic; margin:8pt 0;}
+    table{border-collapse:collapse; width:100%; margin-top:6pt;}
+    th{background:#1F3864; color:#fff; padding:5pt; font-size:9.5pt; text-align:left;}
+    td{border:1pt solid #BFBFBF; padding:5pt; font-size:10pt; vertical-align:top;}
+    .cell-lbl{font-weight:bold; color:#1F3864;}
+  </style></head>
+  <body>
+    <h1>Plan Director del Proyecto — OTEC Geotec</h1>
+    <p class="meta">Cliente: ${esc(st.m_cliente)} &nbsp;|&nbsp; Contraparte: ${esc(st.m_contraparte)} &nbsp;|&nbsp;
+      Facilitador: ${esc(st.m_facilitador)} &nbsp;|&nbsp; Sesión 1: ${esc(st.m_fecha1)} &nbsp;|&nbsp; Sesión 2: ${esc(st.m_fecha2)}</p>
+
+    <h2>1. Propósito y Visión</h2>
+    <p><span class="cell-lbl">Propósito: </span>${esc(st.s1_proposito) || '(pendiente)'}</p>
+    <p><span class="cell-lbl">Visión 2027: </span>${esc(st.s1_vision) || '(pendiente)'}</p>
+
+    <h2>2. Modelo de Negocio / Valor OTEC</h2>
+    <table>
+      <tr><td class="cell-lbl">1. Segmentos</td><td>${esc(st.s1_c1)}</td></tr>
+      <tr><td class="cell-lbl">2. Propuesta de valor</td><td>${esc(st.s1_c2)}</td></tr>
+      <tr><td class="cell-lbl">3. Canales</td><td>${esc(st.s1_c3)}</td></tr>
+      <tr><td class="cell-lbl">4. Relación con clientes internos</td><td>${esc(st.s1_c4)}</td></tr>
+      <tr><td class="cell-lbl">5. Fuentes de sostenibilidad</td><td>${esc(st.s1_c5)}</td></tr>
+      <tr><td class="cell-lbl">6. Estructura de costos</td><td>${esc(st.s1_c6)}</td></tr>
+    </table>
+    <div class="callout">Decisión estratégica (cautiva vs. abierta a terceros): <strong>${esc(st.decision)}</strong>. ${esc(st.s1_dec_notas)}</div>
+    <p><span class="cell-lbl">Tarea para Cristofer antes de la Sesión 2: </span>${esc(st.s1_tarea) || '(pendiente)'}</p>
+
+    <h2>3. Modelo de Operación</h2>
+    <table>
+      <tr><td class="cell-lbl">Gobernanza</td><td>${esc(st.s2_op1)}</td></tr>
+      <tr><td class="cell-lbl">Procesos críticos</td><td>${esc(st.s2_op2)}</td></tr>
+      <tr><td class="cell-lbl">Tecnología</td><td>${esc(st.s2_op3)}</td></tr>
+      <tr><td class="cell-lbl">Personas</td><td>${esc(st.s2_op4)}</td></tr>
+    </table>
+    <div class="callout">¿Qué pasa el día 91? ${esc(st.s2_dia91) || '(pendiente)'}</div>
+
+    <h2>4. Riesgos y Factores Críticos de Éxito</h2>
+    <table><tr><th>Riesgo / FCE</th><th>Tipo</th><th>Probabilidad</th><th>Impacto</th></tr>${rowsRiesgos}</table>
+
+    <h2>5. Objetivos, Metas e Indicadores 2026-2027</h2>
+    <table><tr><th>Objetivo</th><th>Resultado clave / indicador</th><th>Meta / trimestre</th></tr>${rowsOkr}</table>
+
+    <h2>6. Próximos pasos</h2>
+    <p><span class="cell-lbl">Responsable de redactar el borrador: </span>${esc(st.s2_responsable) || '(pendiente)'} &nbsp;|&nbsp;
+       <span class="cell-lbl">Plazo: </span>${esc(st.s2_plazo) || '(pendiente)'}</p>
+    <p>${esc(st.s2_notas)}</p>
+
+    <p style="margin-top:24pt; font-size:9pt; color:#808080;">AKADEM · Proyecto OTEC Geotec · Documento de trabajo interno · Generado ${new Date().toLocaleDateString('es-CL')}</p>
+  </body></html>`;
+
+  const blob = new Blob(['﻿', html], {type:'application/msword'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Plan_Director_OTEC_Geotec.doc';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+</script>
+</body>
+</html>
